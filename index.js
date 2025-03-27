@@ -7,6 +7,7 @@ import userRoutes from "./routes/user.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import { loggerMiddleware } from "./middlewares/logger.middleware.js";
 import path from "path";
+import { products } from "./models/product.model.js"; // ✅ Import products array
 
 const app = express();
 const PORT = 3000;
@@ -29,9 +30,9 @@ app.use("/cart", cartRoutes);
 app.use("/users", userRoutes);
 app.use("/orders", orderRoutes);
 
-// Home Route (✅ FIXED: Passing user session)
+// ✅ FIX: Pass `products` when rendering home.ejs
 app.get("/", (req, res) => {
-  res.render("home", { title: "Online Bookstore", user: req.session.user });
+  res.render("home", { title: "Online Bookstore", user: req.session.user, products });
 });
 
 // 404 Error Handling
@@ -41,3 +42,4 @@ app.use((req, res) => {
 
 // Start Server
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
