@@ -3,6 +3,7 @@
 <head>
     <title>Online Bookstore</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
     <!-- Navbar -->
@@ -10,17 +11,27 @@
         <div class="container">
             <a class="navbar-brand" href="/">Online Bookstore</a>
             
-            <!-- Navbar Right Side -->
-            <div class="ms-auto">
-                <% if (user) { %>
-                    <span class="navbar-text text-white me-3">Welcome, <%= user.username %> !</span>
-                    <a href="/cart" class="btn btn-secondary btn-sm">Cart</a>
-                    <a href="/orders" class="btn btn-success btn-sm">Orders</a>
-                    <a href="/users/logout" class="btn btn-danger btn-sm">Logout</a>
-                <% } else { %>
-                    <a href="/users/login" class="btn btn-info btn-sm">Login</a>
-                    <a href="/users/register" class="btn btn-warning btn-sm">Register</a>
-                <% } %>
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <% if (user) { %>
+                        <li class="nav-item">
+                            <span class="navbar-text text-white me-3">Welcome, <%= user.username %>!</span><br>
+                        </li><br>
+                        <li class="nav-item"><a href="/cart" class="btn btn-secondary btn-sm me-2">Cart</a></li><br>
+                        <li class="nav-item"><a href="/orders" class="btn btn-success btn-sm me-2">Orders</a></li><br>
+                        <li class="nav-item"><a href="/users/logout" class="btn btn-danger btn-sm">Logout</a></li><br>
+                    <% } else { %>
+                        <li class="nav-item"><a href="/users/login" class="btn btn-info btn-sm me-2">Login</a></li>
+                        <br>
+                        <li class="nav-item"><a href="/users/register" class="btn btn-warning btn-sm">Register</a></li>
+                    <% } %>
+                </ul>
             </div>
         </div>
     </nav>
@@ -29,9 +40,9 @@
     <div class="container mt-5 text-center">
         <h1>Welcome to the Online Bookstore</h1>
 
-        <!-- Search Bar -->
+        <!-- Responsive Search Bar -->
         <form action="/products" method="GET" class="d-flex justify-content-center mt-3">
-            <input type="text" name="search" class="form-control w-50" placeholder="Search for books..." required>
+            <input type="text" name="search" class="form-control w-100 w-md-50" placeholder="Search for books..." required>
             <button type="submit" class="btn btn-primary ms-2">Search</button>
         </form>
 
@@ -44,107 +55,55 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Trending Books</h2>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">The Alchemist</h5>
-                        <p class="card-text">By Paulo Coelho</p>
-                        <a href="/products" class="btn btn-primary">View More</a>
+            <% products.slice(0, 3).forEach(product => { %>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <h5 class="card-title"><%= product.title %></h5>
+                            <p class="card-text">By <%= product.author %></p>
+                            <a href="/products" class="btn btn-primary">View More</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Atomic Habits</h5>
-                        <p class="card-text">By James Clear</p>
-                        <a href="/products" class="btn btn-primary">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Rich Dad Poor Dad</h5>
-                        <p class="card-text">By Robert Kiyosaki</p>
-                        <a href="/products" class="btn btn-primary">View More</a>
-                    </div>
-                </div>
-            </div>
+            <% }) %>
         </div>
     </div>
 
-    <!-- Limited Edition Books Section -->
+    <!-- Limited Edition Books -->
     <div class="container mt-5">
         <h2 class="text-center text-danger mb-4">Limited Edition Books</h2>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card border-danger">
-                    <div class="card-body">
-                        <h5 class="card-title text-danger">Harry Potter - 20th Anniversary Edition</h5>
-                        <p class="card-text">By J.K. Rowling</p>
-                        <p class="text-danger fw-bold">Limited Edition</p>
-                        <a href="/products" class="btn btn-danger">View More</a>
+            <% products.filter(p => p.limitedEdition).slice(0, 3).forEach(product => { %>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card border-danger">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-danger"><%= product.title %></h5>
+                            <p class="card-text">By <%= product.author %></p>
+                            <p class="text-danger fw-bold">Limited Edition</p>
+                            <a href="/products" class="btn btn-danger">View More</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card border-danger">
-                    <div class="card-body">
-                        <h5 class="card-title text-danger">The Hobbit - Illustrated Edition</h5>
-                        <p class="card-text">By J.R.R. Tolkien</p>
-                        <p class="text-danger fw-bold">Limited Edition</p>
-                        <a href="/products" class="btn btn-danger">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card border-danger">
-                    <div class="card-body">
-                        <h5 class="card-title text-danger">Sherlock Holmes - Collector's Edition</h5>
-                        <p class="card-text">By Arthur Conan Doyle</p>
-                        <p class="text-danger fw-bold">Limited Edition</p>
-                        <a href="/products" class="btn btn-danger">View More</a>
-                    </div>
-                </div>
-            </div>
+            <% }) %>
         </div>
     </div>
 
-    <!-- Game Director Books Section -->
+    <!-- Game Director Books (Hot Sale) -->
     <div class="container mt-5">
         <h2 class="text-center text-warning mb-4">🔥 Hot Sale - Game Director Books</h2>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card border-warning">
-                    <div class="card-body">
-                        <h5 class="card-title text-warning">Hideo Kojima: The Creative Gene</h5>
-                        <p class="card-text">By Hideo Kojima</p>
-                        <p class="text-warning fw-bold">🔥 Hot Sale</p>
-                        <a href="/products" class="btn btn-warning">View More</a>
+            <% products.filter(p => p.hotSale).slice(0, 3).forEach(product => { %>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card border-warning">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-warning"><%= product.title %></h5>
+                            <p class="card-text">By <%= product.author %></p>
+                            <p class="text-warning fw-bold">🔥 Hot Sale</p>
+                            <a href="/products" class="btn btn-warning">View More</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card border-warning">
-                    <div class="card-body">
-                        <h5 class="card-title text-warning">Sid Meier’s Memoir!</h5>
-                        <p class="card-text">By Sid Meier</p>
-                        <p class="text-warning fw-bold">🔥 Hot Sale</p>
-                        <a href="/products" class="btn btn-warning">View More</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card border-warning">
-                    <div class="card-body">
-                        <h5 class="card-title text-warning">The Art of Naughty Dog</h5>
-                        <p class="card-text">By Naughty Dog Studios</p>
-                        <p class="text-warning fw-bold">🔥 Hot Sale</p>
-                        <a href="/products" class="btn btn-warning">View More</a>
-                    </div>
-                </div>
-            </div>
+            <% }) %>
         </div>
     </div>
 
@@ -158,5 +117,8 @@
             <a href="#" class="text-white mx-2">Twitter</a>
         </p>
     </footer>
+
+    <!-- Bootstrap JS for Navbar Toggle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
